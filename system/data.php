@@ -18,7 +18,8 @@
 
 
 	function get_db_connection() {
-	  $db = mysqli_connect('Host', 'User', 'Password', 'DB'); // Change!
+	
+		//$db = mysqli_connect('localhost', 'user', 'pwd', 'db'); // Change!
     if (mysqli_connect_error()) {
         die('Verbindungsfehler (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
     }

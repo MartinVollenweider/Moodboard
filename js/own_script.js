@@ -1,39 +1,52 @@
-$( document ).ready(function() {
+document.addEventListener('DOMContentLoaded', initFunc);
+
+function initFunc() {
+	// zeige alle Bilder
+	var url = 'showImage.php'
+	var request = new Request(url, {
+		 method: 'POST'
+	});
+	fetch(request)
+		.then(response => response.text())
+		.then(data => {
+			console.log(data);
+			document.querySelector('#show').innerHTML=data;
+			makeDraggable();
+		})
+		.catch(function (error) {
+		    console.log('Request failed', error);
+		});/*- Ende fetch */
 
 	// Neues Bild via Form einfügen
-	$('#formFooter').submit( function(e) {
-		// https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
-		// Antwort von Devin Venable
-		e.preventDefault();
-		var data = new FormData(this);
+	document.querySelector('#formFooter').addEventListener('submit',insertFunc);
+}; /* Ende initFunc */
 
-		$.ajax({
-			url: 'insertImage.php',
-			data: data,
-			contentType: false,
-			processData: false,
-			type: 'POST',
-			success: function(data){
-				// An bestehende Bilder anhängen
-				$('#show').append(data);
-				//console.log(data);
-				// Funktion aufrufen um draggable zu machen
-				makeDraggable()
-			}
-		});
+function insertFunc(ereignis) {
+	// https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
+	// Antwort von Devin Venable
+	ereignis.preventDefault();
+	// https://time2hack.com/2018/08/upload-files-to-php-backend-using-fetch-formdata/
+
+	var form = new FormData(document.querySelector('#formFooter'));
+	var url = 'insertImage.php'
+	var request = new Request(url, {
+	   method: 'POST',
+	   body: form
 	});
 
-	// zeige alle Bilder
-	$.ajax({
-		url: 'showImage.php',
-		type: 'POST',
-		success: function(data){
-			// Alles von DB neu einfügen
-			$("#show").html(data);
-				// Funktion aufrufen um draggable zu machen
-			makeDraggable()
-		}
-	});
+	fetch(request)
+	  .then(response => response.text())
+	  .then(data => {
+			console.log(data);
+			var el = document.createElement('div');
+			el.innerHTML =  data;
+			document.querySelector('#show').appendChild(el.firstChild);
+			makeDraggable();
+		})
+		.catch(function (error) {
+				console.log('Request failed', error);
+		});/*- Ende fetch */
+	};  /* Ende insertFunc */
 
 	// Objekte draggable machen
 	function makeDraggable() {
@@ -45,11 +58,11 @@ $( document ).ready(function() {
 		} catch(err) {
 		  console.log("no Draggable objects");
 		}
-		Draggables = Subjx('.draggable').drag(methods);
+		Draggables = Subjx('.draggable').drag(DragMethods);
 	};
 
 
-	methods = {
+	DragMethods = {
 		onDrop(e, el) {
 			// Alle Eigenschaften herausfinden:
 			var id = el.id;   // eg id_166, but only needed id_166
@@ -65,32 +78,28 @@ $( document ).ready(function() {
 			values = values.split(',');
 			var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
 			// URL zusammensetzen
-			var data = "id=";
-			data += id;
-			data += "&x=";
-			data += x;
-			data += "&y=";
-			data += y;
-			data += "&w=";
-			data += w;
-			data += "&h=";
-			data += h;
-			data += "&rot=";
-			data += rot;
-			//console.log(data);
+			var currentImage = "?id=";
+			currentImage += id;
+			currentImage += "&x=";
+			currentImage += x;
+			currentImage += "&y=";
+			currentImage += y;
+			currentImage += "&w=";
+			currentImage += w;
+			currentImage += "&h=";
+			currentImage += h;
+			currentImage += "&rot=";
+			currentImage += rot;
 
 			// In DB speichern
-			$.ajax({
-				url: 'updateImage.php',
-				data: data,
-				cache: false,
-				contentType: false,
-				processData: false,
-				type: 'GET',
-				success: function(data){
-					// Do nothing
-				}
+			var url = 'updateImage.php'+currentImage;
+			console.log(url);
+			var request = new Request(url, {
+				 method: 'GET'
 			});
-		}
-	};
-});
+			fetch(request)
+				.catch(function (error) {
+						console.log('Request failed', error);
+				});/*- Ende fetch */
+		} /* Ende onDrop */
+	}; /* Ende methods */

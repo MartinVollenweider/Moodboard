@@ -3,7 +3,7 @@
 	ini_set('display_errors', '1');
 
 	include_once('system/data.php');
-	include_once('system/security.php');
+	//include_once('system/security.php');
 
 	$result = show_content();
 
