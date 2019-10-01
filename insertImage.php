@@ -17,15 +17,9 @@
 		$rot = 0;
 		$result = create_content($x, $y, $w, $h, $rot, $cont);
 		if ($result){
-			//echo "<div id='id_".$letzteID."' class='draggable' style='top:".$y."; left:".$x.";'>";
-			//echo "<img src='".$path.$cont."'>";
-			//echo "</div>";
-			$createContent = true;
 			$response  = "<div id='id_".$letzteID."' class='draggable' style='top:".$y."; left:".$x.";'>";
 			$response .= "<img src='".$path.$cont."'>";
 			$response .= "</div>";
 			echo $response;
-		} else {
-			//$createContent = false;
 		}
 	}

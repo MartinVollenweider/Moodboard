@@ -5,26 +5,26 @@ document.addEventListener('DOMContentLoaded', initFunc);
  * Lade und zeige alle Bilder
  */
 function initFunc() {
-var url = 'showImage.php';
-var request = new Request(url, {
-method: 'POST'
+  var url = 'showImage.php';
+  var request = new Request(url, {
+  method: 'POST'
   });
 
-/* Fetch: Per AJAX alle Bilder vom Server laden */
-fetch(request)
-.then(response => response.text())
-.then(data => {
-console.log(data);
-document.querySelector('#show').innerHTML = data;
-makeDraggable();
-})
-.catch(error => {
-    console.log('Request failed', error);
-});/*- Ende fetch */
+  /* Fetch: Per AJAX alle Bilder vom Server laden */
+  fetch(request)
+  .then(response => response.text())
+  .then(data => {
+  console.log(data);
+  document.querySelector('#show').innerHTML = data;
+  makeDraggable();
+  })
+  .catch(error => {
+      console.log('Request failed', error);
+  });/*- Ende fetch */
 
-// Neues Bild via Form einfügen:
-// Wenn das Formular abgesendet wird, führe insertFunc() aus
-document.querySelector('#formFooter').addEventListener('submit',insertFunc);
+  // Neues Bild via Form einfügen:
+  // Wenn das Formular abgesendet wird, führe insertFunc() aus
+  document.querySelector('#formFooter').addEventListener('submit',insertFunc);
 }; /* Ende initFunc */
 
 /**
