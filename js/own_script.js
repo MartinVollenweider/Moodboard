@@ -66,6 +66,7 @@ console.log('Request failed', error);
  */
 function makeDraggable() {
   // Probiere alle Draggables zu deaktiveren…
+  // weil sonst «Geister»-Elemnte ohne Inhalt, nur mit Anassern zurückbleiben
   try {
     Draggables.forEach(item => {
       item.disable();
