@@ -14,12 +14,12 @@ function initFunc() {
   fetch(request)
   .then(response => response.text())
   .then(data => {
-  console.log(data);
-  document.querySelector('#show').innerHTML = data;
-  makeDraggable();
-  })
+    console.log(data);
+    document.querySelector('#show').innerHTML = data;
+    makeDraggable();
+    })
   .catch(error => {
-      console.log('Request failed', error);
+    console.log('Request failed', error);
   });/*- Ende fetch */
 
   // Neues Bild via Form einfügen:
@@ -48,17 +48,17 @@ var request = new Request(url, {
 fetch(request)
   .then(response => response.text())
   .then(data => {
-      // Erhalte als Antwort alle Objekte
-      // und ersetze das aktuelle HTML mit dem neuen vom Server
-console.log(data);
-var el = document.createElement('div');
-el.innerHTML = data;
-document.querySelector('#show').appendChild(el.firstChild);
-makeDraggable();
-})
-.catch(error => {
-console.log('Request failed', error);
-});/* Ende fetch */
+    // Erhalte als Antwort alle Objekte
+    // und ersetze das aktuelle HTML mit dem neuen vom Server
+    console.log(data);
+    var el = document.createElement('div');
+    el.innerHTML = data;
+    document.querySelector('#show').appendChild(el.firstChild);
+    makeDraggable();
+  })
+  .catch(error => {
+    console.log('Request failed', error);
+  });/* Ende fetch */
 };  /* Ende insertFunc */
 
 /**
@@ -66,7 +66,7 @@ console.log('Request failed', error);
  */
 function makeDraggable() {
   // Probiere alle Draggables zu deaktiveren…
-  // weil sonst «Geister»-Elemnte ohne Inhalt, nur mit Anassern zurückbleiben
+  // weil sonst «Geister»-Elemnte ohne Inhalt, nur mit Anfassern zurückbleiben
   try {
     Draggables.forEach(item => {
       item.disable();
