@@ -1,10 +1,10 @@
 // Wenn das Dokument geladen wurde, führe initFunc() aus
-document.addEventListener('DOMContentLoaded', initFunc);
+document.addEventListener('DOMContentLoaded', showFunc);
 
 /**
  * Lade und zeige alle Bilder
  */
-function initFunc() {
+function showFunc() {
   var url = 'showObject.php';
   var request = new Request(url);
 
@@ -88,45 +88,50 @@ var DragMethods = {
    * Sende die Daten an die Datenbank
    */
   onDrop(ereignis, element) {
-    // Alle Eigenschaften herausfinden:
-    var id = element.id;   // eg "id_166", but only needed "166"
-    id = id.substring(3, id.length);
-    var h = element.clientHeight; // Elementhöhe
-    var w = element.clientWidth; // Elementbreite
-    var x = element.offsetLeft; // Element: X-Position
-    var y = element.offsetTop; // Element: Y-Position
-    var cont = element.innerHTML;
-    // Den Rotationswinkel berechnen:
-    // https://css-tricks.com/get-value-of-css-rotation-through-javascript/
-    var values = element.style.transform.split('(')[1],
-    values = values.split(')')[0],
-    values = values.split(',');
-    var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
-    // URL zusammensetzen
-    var currentObject = "?id=";
-    currentObject += id;
-    currentObject += "&x=";
-    currentObject += x;
-    currentObject += "&y=";
-    currentObject += y;
-    currentObject += "&w=";
-    currentObject += w;
-    currentObject += "&h=";
-    currentObject += h;
-    currentObject += "&rot=";
-    currentObject += rot;
-
-    // In DB speichern: nur Daten schicken, keine Daten empfangen
-    var url = 'updateObject.php' + currentObject;
-    console.log(url);
-    var request = new Request(url, {
-        method: 'GET'
-    });
-
-    /* Fetch: URL per AJAX aufrufen, um Daten in DB zu speichern */
-    fetch(request)
-      .catch(error => {
-          console.log('Request failed', error);
-      });/*- Ende fetch */
+    // Funktion updateFunc aufgerufen
+    updateFunc(element);
   } /* Ende onDrop */
 }; /* Ende methods */
+
+function updateFunc(element) {
+  // Alle Eigenschaften herausfinden:
+  var id = element.id;   // eg "id_166", but only needed "166"
+  id = id.substring(3, id.length);
+  var h = element.clientHeight; // Elementhöhe
+  var w = element.clientWidth; // Elementbreite
+  var x = element.offsetLeft; // Element: X-Position
+  var y = element.offsetTop; // Element: Y-Position
+  var cont = element.innerHTML;
+  // Den Rotationswinkel berechnen:
+  // https://css-tricks.com/get-value-of-css-rotation-through-javascript/
+  var values = element.style.transform.split('(')[1],
+  values = values.split(')')[0],
+  values = values.split(',');
+  var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
+  // URL zusammensetzen
+  var currentObject = "?id=";
+  currentObject += id;
+  currentObject += "&x=";
+  currentObject += x;
+  currentObject += "&y=";
+  currentObject += y;
+  currentObject += "&w=";
+  currentObject += w;
+  currentObject += "&h=";
+  currentObject += h;
+  currentObject += "&rot=";
+  currentObject += rot;
+
+  // In DB speichern: nur Daten schicken, keine Daten empfangen
+  var url = 'updateObject.php' + currentObject;
+  console.log(url);
+  var request = new Request(url, {
+      method: 'GET'
+  });
+
+  /* Fetch: URL per AJAX aufrufen, um Daten in DB zu speichern */
+  fetch(request)
+    .catch(error => {
+        console.log('Request failed', error);
+    });/*- Ende fetch */
+}; // Ende updateFunc
