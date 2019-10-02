@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', initFunc);
  * Lade und zeige alle Bilder
  */
 function initFunc() {
-  var url = 'showImage.php';
+  var url = 'showObject.php';
   var request = new Request(url, {
   method: 'POST'
   });
@@ -38,7 +38,7 @@ ereignis.preventDefault();
 // https://time2hack.com/2018/08/upload-files-to-php-backend-using-fetch-formdata/
 
 var form = new FormData(document.querySelector('#formFooter'));
-var url = 'insertImage.php'
+var url = 'insertObject.php'
 var request = new Request(url, {
   method: 'POST',
   body: form
@@ -104,21 +104,21 @@ var DragMethods = {
     values = values.split(',');
     var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
     // URL zusammensetzen
-    var currentImage = "?id=";
-    currentImage += id;
-    currentImage += "&x=";
-    currentImage += x;
-    currentImage += "&y=";
-    currentImage += y;
-    currentImage += "&w=";
-    currentImage += w;
-    currentImage += "&h=";
-    currentImage += h;
-    currentImage += "&rot=";
-    currentImage += rot;
+    var currentObject = "?id=";
+    currentObject += id;
+    currentObject += "&x=";
+    currentObject += x;
+    currentObject += "&y=";
+    currentObject += y;
+    currentObject += "&w=";
+    currentObject += w;
+    currentObject += "&h=";
+    currentObject += h;
+    currentObject += "&rot=";
+    currentObject += rot;
 
     // In DB speichern
-    var url = 'updateImage.php' + currentImage;
+    var url = 'updateObject.php' + currentObject;
     console.log(url);
     var request = new Request(url, {
         method: 'GET'

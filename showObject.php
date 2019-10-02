@@ -4,7 +4,7 @@
 
 	include_once('system/data.php');
 	//include_once('system/security.php');
-
+	// Funktion von data.php
 	$result = show_content();
 
 	while($event = mysqli_fetch_assoc($result)){
