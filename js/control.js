@@ -6,18 +6,17 @@ document.addEventListener('DOMContentLoaded', initFunc);
  */
 function initFunc() {
   var url = 'showObject.php';
-  var request = new Request(url, {
-  method: 'POST'
-  });
+  var request = new Request(url);
 
-  /* Fetch: Per AJAX alle Bilder vom Server laden */
+  /* Fetch: Per AJAX alle Objekte vom Server laden */
+  /* Ergnis von Server ist in data */
   fetch(request)
   .then(response => response.text())
   .then(data => {
     console.log(data);
     document.querySelector('#show').innerHTML = data;
     makeDraggable();
-    })
+  })
   .catch(error => {
     console.log('Request failed', error);
   });/*- Ende fetch */
@@ -88,18 +87,18 @@ var DragMethods = {
    * Wenn ein Objekt losgelassen wird:
    * Sende die Daten an die Datenbank
    */
-  onDrop(e, el) {
+  onDrop(ereignis, element) {
     // Alle Eigenschaften herausfinden:
-    var id = el.id;   // eg "id_166", but only needed "166"
+    var id = element.id;   // eg "id_166", but only needed "166"
     id = id.substring(3, id.length);
-    var h = el.clientHeight; // Elementhöhe
-    var w = el.clientWidth; // Elementbreite
-    var x = el.offsetLeft; // Element: X-Position
-    var y = el.offsetTop; // Element: Y-Position
-    var cont = el.innerHTML;
+    var h = element.clientHeight; // Elementhöhe
+    var w = element.clientWidth; // Elementbreite
+    var x = element.offsetLeft; // Element: X-Position
+    var y = element.offsetTop; // Element: Y-Position
+    var cont = element.innerHTML;
     // Den Rotationswinkel berechnen:
     // https://css-tricks.com/get-value-of-css-rotation-through-javascript/
-    var values = el.style.transform.split('(')[1],
+    var values = element.style.transform.split('(')[1],
     values = values.split(')')[0],
     values = values.split(',');
     var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
@@ -117,7 +116,7 @@ var DragMethods = {
     currentObject += "&rot=";
     currentObject += rot;
 
-    // In DB speichern
+    // In DB speichern: nur Daten schicken, keine Daten empfangen
     var url = 'updateObject.php' + currentObject;
     console.log(url);
     var request = new Request(url, {
