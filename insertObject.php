@@ -18,7 +18,7 @@
 		// Finktion von data.php
 		$result = create_content($x, $y, $w, $h, $rot, $cont);
 		if ($result){
-			$response  = "<div id='id_".$letzteID."' class='draggable' style='top:".$y."; left:".$x.";'>";
+			$response  = "<div id='id_".$letzteID."' class='draggable' style='top:".$y."px; left:".$x."px;'>";
 			$response .= "<img src='".$path.$cont."'>";
 			$response .= "</div>";
 			echo $response;
