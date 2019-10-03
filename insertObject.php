@@ -11,7 +11,7 @@
 		move_uploaded_file($_FILES['filename']['tmp_name'], $path.$cont);
 		// Fields:
 		$x = 0;
-		$y = 0;
+		$y = 50;
 		$w = 100;
 		$h = 50;
 		$rot = 0;
