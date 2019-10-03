@@ -18,8 +18,7 @@
 
 
 	function get_db_connection() {
-		$db = mysqli_connect('localhost', '537449_28_1', 'E3zIM@N6iahD', '537449_28_1'); // Change!
-		//$db = mysqli_connect('localhost', 'user', 'pwd', 'db'); // Change!
+		$db = mysqli_connect('localhost', 'user', 'pwd', 'db'); // Change!
     if (mysqli_connect_error()) {
         die('Verbindungsfehler (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
     }
