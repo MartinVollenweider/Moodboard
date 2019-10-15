@@ -15,7 +15,7 @@
 		$w = 100;
 		$h = 50;
 		$rot = 0;
-		// Finktion von data.php
+		// Funktion von data.php
 		$result = create_content($x, $y, $w, $h, $rot, $cont);
 		if ($result){
 			$response  = "<div id='id_".$letzteID."' class='draggable' style='top:".$y."px; left:".$x."px;'>";

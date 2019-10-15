@@ -1,6 +1,4 @@
 <?php
-  //require_once("data.php");
-
 	function sql_injection_filter($input){
 		$db = get_db_connection();
 

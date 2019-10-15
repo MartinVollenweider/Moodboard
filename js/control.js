@@ -7,13 +7,17 @@ function showFunc() {
   var request = new Request(url);
 
   // Fetch: Per AJAX alle Objekte vom Server laden
-  // Ergnis von Server ist in data
+  // request und response: https://flaviocopes.com/fetch-api/
+  // Ergebnis von Server ist in data
+	
   fetch(request)
   .then(response => response.text())
-  .then(data => {
-    console.log(data);
-    document.querySelector('#show').innerHTML = data;
-    makeDraggableFunc();
+	// Arrow Function: https://www.sitepoint.com/es6-arrow-functions-new-fat-concise-syntax-javascript/
+	// dataParameter ist Funktionsparameter (beliebiger Name)
+  .then(dataParameter => {
+    console.log(dataParameter);
+    document.querySelector('#show').innerHTML = dataParameter;
+    makeDraggableFunc();	// Draggable-Funktion aufrufen
   })
   .catch(error => {
     console.log('Request failed', error);
@@ -24,7 +28,7 @@ function showFunc() {
   document.querySelector('#formFooter').addEventListener('submit',insertFunc);
 } // Ende initFunc
 
-// Ein neues Objekt einfügen   %ici
+// Ein neues Objekt einfügen
 function insertFunc(ereignis) {
   /*  https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
       Antwort von Devin Venable
@@ -32,7 +36,8 @@ function insertFunc(ereignis) {
   ereignis.preventDefault();
   // https://time2hack.com/2018/08/upload-files-to-php-backend-using-fetch-formdata/
   var form = new FormData(document.querySelector('#formFooter'));
-  var url = 'insertObject.php'
+  var url = 'insertObject.php';
+	// https://flaviocopes.com/fetch-api/#body-content
   var request = new Request(url, {
     method: 'POST',
     body: form
@@ -58,7 +63,7 @@ function insertFunc(ereignis) {
 // Objekte draggable machen
 function makeDraggableFunc() {
   /*  Probiere alle Draggables zu deaktiveren…
-      weil sonst «Geister»-Elemnte ohne Inhalt, nur mit Anfassern zurückbleiben */
+      …weil sonst «Geister»-Elemnte ohne Inhalt, nur mit Anfassern zurückbleiben */
   try {
     Draggables.forEach(item => {
       item.disable();
