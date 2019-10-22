@@ -1,69 +1,59 @@
 // Wenn das Dokument geladen wurde, führe showFunc() aus
 document.addEventListener('DOMContentLoaded', showFunc);
 
-// Lade und zeige alle Objekte
+/* ********************** showFunc() **** */
 function showFunc() {
-  var url = 'showObject.php';
-  var request = new Request(url);
-
-  // Fetch: Per AJAX alle Objekte vom Server laden
-  // request und response: https://flaviocopes.com/fetch-api/
-  // Ergebnis von Server ist in data
-	
-  fetch(request)
-  .then(response => response.text())
-	// Arrow Function: https://www.sitepoint.com/es6-arrow-functions-new-fat-concise-syntax-javascript/
-	// dataParameter ist Funktionsparameter (beliebiger Name)
-  .then(dataParameter => {
-    console.log(dataParameter);
-    document.querySelector('#show').innerHTML = dataParameter;
-    makeDraggableFunc();	// Draggable-Funktion aufrufen
+  var request = new Request('showObject.php', {
+      method: 'POST'
   })
-  .catch(error => {
-    console.log('Request failed', error);
-  });// Ende fetch
 
-  // Neues Objekt via Form einfügen:
+  // AJAX, Objekte vom Server, Ergebnis in data
+  fetch(request)
+    .then(function(response) {
+        return response.text();
+    })
+    .then(function(data) {
+        document.querySelector('#show').innerHTML = data;
+        makeDraggableFunc();	// Draggable-Funktion aufrufen
+    })
+    .catch(function(error) {
+        console.log('Request failed', error);
+    });// Ende fetch
+
   // Wenn das Formular abgesendet wird, führe insertFunc() aus
   document.querySelector('#formFooter').addEventListener('submit',insertFunc);
-} // Ende initFunc
+} // Ende showFunc
+/* ********************** /showFunc() **** */
 
-// Ein neues Objekt einfügen
+/* ********************** insertFunc() **** */
 function insertFunc(ereignis) {
-  /*  https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax
-      Antwort von Devin Venable
-      Verhindere, dass die Standardaktion ausgeführt wird: Formular an den PHP Server senden */
-  ereignis.preventDefault();
-  // https://time2hack.com/2018/08/upload-files-to-php-backend-using-fetch-formdata/
+  ereignis.preventDefault(); // Standardaktion verhindern
   var form = new FormData(document.querySelector('#formFooter'));
-  var url = 'insertObject.php';
-	// https://flaviocopes.com/fetch-api/#body-content
-  var request = new Request(url, {
+  var request = new Request('insertObject.php', {
     method: 'POST',
     body: form
   })
 
   // Fetch: Sende das neue Objekt per AJAX an den Server
   fetch(request)
-    .then(response => response.text())
-    .then(data => {
-      /*  Erhalte als Antwort alle Objekte
-          und ersetze das aktuelle HTML mit dem neuen vom Server */
-      console.log(data);
-      var el = document.createElement('div');
-      el.innerHTML = data;
-      document.querySelector('#show').appendChild(el.firstChild);
-      makeDraggableFunc();
+    .then(function(response) {
+        return response.text();
     })
-    .catch(error => {
-      console.log('Request failed', error);
-  }) // Ende fetch
+    .then(function(data) {
+        var el = document.createElement('div');
+        el.innerHTML = data;
+        document.querySelector('#show').appendChild(el.firstChild);
+        makeDraggableFunc();	// Draggable-Funktion aufrufen
+    })
+    .catch(function(error) {
+        console.log('Request failed', error);
+    });// Ende fetch
 }  // Ende insertFunc
+/* ********************** /insertFunc() **** */
 
-// Objekte draggable machen
+/* ********************** makeDraggableFunc() **** */
 function makeDraggableFunc() {
-  /*  Probiere alle Draggables zu deaktiveren…
-      …weil sonst «Geister»-Elemnte ohne Inhalt, nur mit Anfassern zurückbleiben */
+  //alle Draggables deaktiveren wegen «Geister»-Elementen
   try {
     Draggables.forEach(item => {
       item.disable();
@@ -73,35 +63,35 @@ function makeDraggableFunc() {
   }
 
   // Mache alle Objekte draggable
-  Draggables = subjx('.draggable').drag(DragMethods);
+  subjx('.draggable').drag(DragMethods);
 } // Ende makeDraggableFunc
+/* ********************** makeDraggableFunc **** */
 
-/*  Eine Sammlung von Funktionen, die aufgerufen wird, wenn etwas mit den
-    draggable Objekten gemacht wird. */
+//  Funktionen, wenn etwas mit den draggable Objekten gemacht wird.
 var DragMethods = {
-  /*   Wenn ein Objekt losgelassen wird:
-      Sende die Daten an die Datenbank */
+  // loslassen, sende die Daten an die Datenbank
   onDrop(ereignis, element) {
     // Funktion updateFunc aufgerufen
     updateFunc(element);
   } // Ende onDrop
 } // Ende methods
 
+/* ********************** updateFunc() **** */
 function updateFunc(element) {
   // Alle Eigenschaften herausfinden:
-  var id = element.id;   // eg "id_166", but only needed "166"
-  id = id.substring(3, id.length);
+  var id = element.id; // eg "id_166", only needed "166"
+  id = id.replace("id_", "");
   var h = element.clientHeight; // Elementhöhe
   var w = element.clientWidth; // Elementbreite
   var x = element.offsetLeft; // Element: X-Position
   var y = element.offsetTop; // Element: Y-Position
-  var cont = element.innerHTML;
+  //var cont = element.innerHTML;
   // Den Rotationswinkel berechnen:
   // https://css-tricks.com/get-value-of-css-rotation-through-javascript/
-  var values = element.style.transform.split('(')[1],
-  values = values.split(')')[0],
-  values = values.split(',');
-  var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
+  var values = element.style.transform.split('(')[1];
+    values = values.split(')')[0];
+    values = values.split(',');
+    var rot = Math.round(Math.asin(values[1]) * (180/Math.PI));
   // URL zusammensetzen
   var currentObject = "?id=";
   currentObject += id;
@@ -117,15 +107,14 @@ function updateFunc(element) {
   currentObject += rot;
 
   // In DB speichern: nur Daten schicken, keine Daten empfangen
-  var url = 'updateObject.php' + currentObject;
-  console.log(url);
-  var request = new Request(url, {
+  var request = new Request('updateObject.php' + currentObject, {
       method: 'GET'
   });
 
   /* Fetch: URL per AJAX aufrufen, um Daten in DB zu speichern */
   fetch(request)
-    .catch(error => {
+    .catch(function(error) {
         console.log('Request failed', error);
-    }) // Ende fetch
+    });// Ende fetch
 } // Ende updateFunc
+/* ********************** /updateFunc() **** */
